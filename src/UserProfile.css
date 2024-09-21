@@ -1,0 +1,64 @@
+/* تأكد من أن الأنماط مخصصة فقط لصفحة الملف الشخصي باستخدام أسماء فصول خاصة */
+
+/* تنسيق الحاوية الرئيسية لصفحة الملف الشخصي */
+.profile-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* تنسيق البطاقة لصفحة الملف الشخصي */
+.profile-card {
+    width: 500px;
+    border: none;
+    border-radius: 20px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    background-color: rgba(255, 255, 255, 0.9); /* شفافية خفيفة */
+}
+
+.profile-card-body {
+    padding: 30px;
+    text-align: left;
+}
+
+/* تنسيق العناوين لصفحة الملف الشخصي */
+.profile-card-title {
+    font-size: 28px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* تنسيق النصوص لصفحة الملف الشخصي */
+.profile-card-body p {
+    font-size: 18px;
+    margin: 10px 0;
+    line-height: 1.6;
+}
+
+.profile-card-body p strong {
+    color: #555;
+}
+
+/* تنسيق زر العودة إلى الصفحة الرئيسية */
+.btn-profile-primary {
+    background-color: #c475a1;
+    border: none;
+    border-radius: 25px;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease;
+}
+
+.btn-profile-primary:hover {
+    background-color: #a65b87;
+}
+
+.btn-profile-primary i {
+    margin-right: 8px;
+}
