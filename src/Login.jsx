@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';// يُستخدم للتنقل بين الصفحات داخل التطبيق بدون إعادة تحميل الصفحةuseNavigate
 import './Login.css';
 
 const Login = () => {
@@ -8,7 +8,7 @@ const Login = () => {
     const [rememberMe, setRememberMe] = useState(false); // لحفظ حالة remember me
     const [error, setError] = useState('');
     const navigate = useNavigate();
-
+     //يُستخدم لتنفيذ منطق معين عند تحميل المكون أو عند تغيير حالة معينة
     // تحميل البيانات من localStorage عند تحميل الصفحة
     useEffect(() => {
         const savedUsername = localStorage.getItem('username');
@@ -21,9 +21,9 @@ const Login = () => {
             setRememberMe(savedRememberMe);
         }
     }, []);
-
+//يشير إلى الكائن event الذي يحمل تفاصيل حول الحدث الذي حدث. e:
     const handleSubmit = (e) => {
-        e.preventDefault();
+        e.preventDefault();//تمنع إعادة تحميل الصفحة عند الضغط على زر "Login".
         if (username === '' || password === '') {
             setError('Please fill in both fields');
         } else {
@@ -68,6 +68,7 @@ const Login = () => {
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                         />
+                        
                     </div>
                     {error && <p className="error-message">{error}</p>}
                     <div className="form-group">
