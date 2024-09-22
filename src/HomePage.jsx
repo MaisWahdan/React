@@ -7,8 +7,7 @@ const HomePage = () => {
     const [users, setUsers] = useState([]); // لحفظ قائمة المستخدمين
     const [search, setSearch] = useState(''); // لحفظ النص المدخل للبحث
     const [sortOrder, setSortOrder] = useState('asc'); // لحفظ حالة الفرز (تصاعدي أو تنازلي)
-    const [sortBy, setSortBy] = useState('id'); // تحديد طريقة الفرز (ID أو Name)
-
+    const [sortBy, setSortBy] = useState('name');
     // جلب البيانات من الـ API عند تحميل الصفحة أو عند تغيير حالة البحث أو الفرز
     useEffect(() => {
         axios.get(`https://freetestapi.com/api/v1/users?search=${search}&sort=${sortBy}&order=${sortOrder}`)
