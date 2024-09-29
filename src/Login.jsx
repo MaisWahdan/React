@@ -1,89 +1,72 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import './Login.css';
+import React, { useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { AuthContext } from './AuthContext';
+import { useFormik } from 'formik';
+import * as Yup from 'yup'; // للاستفادة من Yup للتحقق من صحة المدخلات
+import './Login.scss';
 
 const Login = () => {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const [rememberMe, setRememberMe] = useState(false); // لحفظ حالة remember me
-    const [error, setError] = useState('');
-    const navigate = useNavigate();
+  const { login } = useContext(AuthContext); // استخدام useContext للوصول إلى دالة login
+  const navigate = useNavigate();
 
-    // تحميل البيانات من localStorage عند تحميل الصفحة
-    useEffect(() => {
-        const savedUsername = localStorage.getItem('username');
-        const savedPassword = localStorage.getItem('password');
-        const savedRememberMe = localStorage.getItem('rememberMe') === 'true';
+  // استخدام Formik لإدارة الحقول والتحقق من صحة المدخلات
+  const formik = useFormik({
+    initialValues: {
+      username: '',
+      password: ''
+    },
+    validationSchema: Yup.object({
+      username: Yup.string().email('Invalid email address').required('Required'),
+      password: Yup.string().min(3, 'Must be 3 characters or more').required('Required'),
+    }),
+    onSubmit: (values) => {
+      if (login(values.username, values.password)) {
+        navigate('/home');
+      } else {
+        formik.setFieldError('general', 'Invalid username or password');
+      }
+    },
+  });
 
-        if (savedRememberMe) {
-            setUsername(savedUsername || '');
-            setPassword(savedPassword || '');
-            setRememberMe(savedRememberMe);
-        }
-    }, []);
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        if (username === '' || password === '') {
-            setError('Please fill in both fields');
-        } else {
-            setError('');
-
-            // إذا كان remember me مفعلاً، حفظ البيانات في localStorage
-            if (rememberMe) {
-                localStorage.setItem('username', username);
-                localStorage.setItem('password', password);
-                localStorage.setItem('rememberMe', rememberMe);
-            } else {
-                // إذا لم يكن remember me مفعلاً، مسح البيانات
-                localStorage.removeItem('username');
-                localStorage.removeItem('password');
-                localStorage.removeItem('rememberMe');
-            }
-
-            // توجيه المستخدم إلى الصفحة الرئيسية بعد تسجيل الدخول باستخدام useNavigate
-            navigate('/home');
-        }
-    };
-
-    return (
-        <div className="login-container">
-            <div className="login-card">
-                <h2>Login</h2>
-                <form onSubmit={handleSubmit}>
-                    <div className="form-group">
-                        <label>Your Email</label>
-                        <input
-                            type="text"
-                            className="form-control"
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
-                        />
-                    </div>
-                    <div className="form-group">
-                        <label>Your Password</label>
-                        <input
-                            type="password"
-                            className="form-control"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                        />
-                    </div>
-                    {error && <p className="error-message">{error}</p>}
-                    <div className="form-group">
-                        <label>
-                            <input
-                                type="checkbox"
-                                checked={rememberMe}
-                                onChange={() => setRememberMe(!rememberMe)}
-                            /> Remember Me
-                        </label>
-                    </div>
-                    <button type="submit" className="btn-submit">Login</button>
-                </form>
-            </div>
-        </div>
-    );
+  return (
+    <div className="login-container">
+      <div className="login-card">
+        <h2>Login</h2>
+        <form onSubmit={formik.handleSubmit}>
+          <div className="form-group">
+            <label>Email:</label>
+            <input
+              type="text"
+              className="form-control"
+              name="username"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.username}
+            />
+            {formik.touched.username && formik.errors.username ? (
+              <div className="error-message">{formik.errors.username}</div>
+            ) : null}
+          </div>
+          <div className="form-group">
+            <label>Password:</label>
+            <input
+              type="password"
+              className="form-control"
+              name="password"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.password}
+            />
+            {formik.touched.password && formik.errors.password ? (
+              <div className="error-message">{formik.errors.password}</div>
+            ) : null}
+          </div>
+          {formik.errors.general && <p className="error-message">{formik.errors.general}</p>}
+          <button type="submit" className="btn-submit">Login</button>
+        </form>
+      </div>
+    </div>
+  );
 };
 
 export default Login;
